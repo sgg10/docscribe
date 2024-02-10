@@ -20,3 +20,9 @@ def download(repository_name: str | None, report_name: str) -> None:
     manager = RepositoryManager(repository_name)
     manager.download(report_name)
     print(f"{report_name} downloaded.")
+
+
+def delete_repository(repository_name: str) -> None:
+    manager = RepositoryManager(repository_name)
+    manager.delete_repository()
+    print("Repository deleted.")

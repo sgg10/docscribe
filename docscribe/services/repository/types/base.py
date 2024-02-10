@@ -41,3 +41,14 @@ class Repository(ABC):
 
         with open(CONFIG_FILE, "w") as f:
             json.dump(data, f, indent=4)
+
+    def delete(self) -> None:
+        with open(CONFIG_FILE, "r") as f:
+            data = json.load(f)
+
+        repos = data.get("repositories", {})
+        del repos[self.name]
+        data["repositories"] = repos
+
+        with open(CONFIG_FILE, "w") as f:
+            json.dump(data, f, indent=4)

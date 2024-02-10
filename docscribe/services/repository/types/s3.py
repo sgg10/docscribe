@@ -3,7 +3,7 @@ from pathlib import Path
 
 import click
 import boto3
-from botocore.exceptions import NoCredentialsError, ClientError
+from botocore.exceptions import NoCredentialsError, ClientError, ProfileNotFound
 
 from docscribe.constants import DIRECTORY
 from docscribe.services.repository.types.base import Repository
@@ -13,7 +13,6 @@ class S3(Repository):
 
     def __init__(self, name: str, config: dict | None = None):
         super().__init__(name, "s3", config)
-        self._auth()
 
     def _auth(self):
         try:
@@ -30,8 +29,12 @@ class S3(Repository):
         except NoCredentialsError:
             print("No AWS credentials found.")
             os._exit(1)
+        except ProfileNotFound:
+            print(f"Profile {self.config['profile_name']} not found.")
+            os._exit(1)
 
     def download(self, report_name: str) -> None:
+        self._auth()
         try:
             paginator = self.s3.get_paginator("list_objects_v2")
             response_iterator = paginator.paginate(
@@ -54,6 +57,7 @@ class S3(Repository):
             print(e)
 
     def list_reports(self, *args, **kwargs) -> list[str]:
+        self._auth()
         try:
             paginator = self.s3.get_paginator("list_objects_v2")
             response_iterator = paginator.paginate(

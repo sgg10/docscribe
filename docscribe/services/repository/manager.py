@@ -54,3 +54,10 @@ class RepositoryManager:
         )
 
         self.repository = REPOSITORY_TYPES[_type](name)
+
+    def delete_repository(self) -> None:
+        if not self.repository:
+            click.echo(f"Repository {self.repository} not found.")
+            return
+
+        self.repository.delete()
