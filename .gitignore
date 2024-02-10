@@ -177,3 +177,5 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/python
 
 .vscode/
+.docscribe_config.json
+docscribe_repos/
