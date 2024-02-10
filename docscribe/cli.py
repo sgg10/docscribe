@@ -34,8 +34,8 @@ class CLIGroup(click.Group):
     def _get_command_list(self, base_path: Path) -> Iterable[str]:
         return [
             filename.stem.replace("cmd_", "")
-            for filename in base_path.rglob("cmd_*.py")
-            if filename.is_file()
+            for filename in base_path.iterdir()
+            if filename.is_file() and filename.name.startswith("cmd_")
         ]
 
     def list_commands(self, ctx: Context) -> List[str]:
