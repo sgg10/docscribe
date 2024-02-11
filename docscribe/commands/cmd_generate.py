@@ -6,29 +6,24 @@ import click
 
 from docscribe.constants import (
     DIRECTORY,
-    TEMPLATES_TYPES,
     CONFIG_FILE,
 )
-from docscribe.services.doc.create import run
+from docscribe.services.generator.main import run
 
 
 @click.command()
-@click.option("-n", "--name", "doc_name", help="Name of the new document")
+@click.option("-n", "--name", "doc_name", help="Name of the document to delete")
 @click.option(
-    "-r", "--repository", help="Repository to create the document in", default="local"
+    "-r", "--repository", help="Repository to delete the document from", default="local"
 )
 @click.option(
-    "-t",
-    "--type",
-    "doc_type",
-    type=click.Choice(TEMPLATES_TYPES.choices()),
-    help="Type of the document",
-    default=TEMPLATES_TYPES.default(),
+    "--use-default-kwargs",
+    is_flag=True,
+    default=False,
+    help="Use default kwargs for the document",
 )
-def command(doc_name, repository, doc_type):
-    """Create a new document."""
-
-    # Load config file
+def command(doc_name, repository, use_default_kwargs):
+    """Generate a document"""
     config_file = Path(CONFIG_FILE)
 
     if not config_file.exists():
@@ -46,9 +41,9 @@ def command(doc_name, repository, doc_type):
 
     if not doc_name:
         # Prompt for doc name
-        doc_name = click.prompt("Enter the name of the document")
+        doc_name = click.prompt("Enter the name of the document to delete")
         while not doc_name:
             rich.print("[red]Document name cannot be empty[/red]")
-            doc_name = click.prompt("Enter the name of the document")
+            doc_name = click.prompt("Enter the name of the document to delete")
 
-    run(doc_name, repository, doc_type)
+    run(doc_name, repository, use_default_kwargs)

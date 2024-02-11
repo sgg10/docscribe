@@ -28,7 +28,11 @@ def command(doc_name, repository):
     with config_file.open("r") as file:
         config = json.load(file)
 
-    if repository not in config.get("repositories", {"local": {}}):
+    repositories = config.get("repositories")
+    if not repositories:
+        repositories = {"local": {}}
+
+    if repository not in repositories:
         raise click.Abort(f"Repository {repository} does not exist in config")
 
     if not doc_name:
