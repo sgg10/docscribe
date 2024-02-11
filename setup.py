@@ -21,7 +21,7 @@ setup(
     author_email="sgg10.develop@gmail.com",
     entry_points="""
         [console_scripts]
-        docscribe=docscribe.main:cli
+        docscribe=app.main:cli
     """,
     python_requires=">=3.11",
 )

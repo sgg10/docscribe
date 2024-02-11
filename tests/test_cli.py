@@ -1,6 +1,6 @@
 from click.testing import CliRunner
 
-from docscribe.main import cli
+from app.main import cli
 
 
 def test_cli_base_execution():
