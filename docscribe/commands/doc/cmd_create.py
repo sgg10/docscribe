@@ -2,8 +2,6 @@ import rich
 import click
 
 from docscribe.constants import (
-    CONFIG,
-    DIRECTORY,
     CONFIG_FILE,
     TEMPLATES_TYPES,
 )

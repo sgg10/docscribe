@@ -1,9 +1,6 @@
 import rich
 
-from docscribe.services.exporter.manager import (
-    ExporterManager,
-    EXPORTER_TYPES,
-)
+from docscribe.services.exporter.manager import ExporterManager
 
 
 def create_exporter() -> None:

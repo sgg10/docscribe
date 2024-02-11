@@ -1,5 +1,3 @@
-import json
-
 import click
 
 from docscribe.services.init import run

@@ -3,31 +3,16 @@ from pathlib import Path
 from typing import Literal
 
 from docscribe.utils.read_config import read_config
-from docscribe.services.exporter.types import (
-    local as LocalExporter,
-    s3 as S3Exporter,
-)
-from docscribe.services.repository.types.s3 import S3 as S3Repository
-
 
 DIRECTORY = Path("docscribe_repos")
 CONFIG_FILE = Path(".docscribe_config.json")
 TMP_DIR = DIRECTORY / ".tmp"
 
-CONFIG = read_config()
+CONFIG = read_config(CONFIG_FILE)
 
 CONFIG_SEGMENTS = Literal["repositories", "exporters"]
 
 S3_AUTH_TYPES = Literal["profile", "keys"]
-
-EXPORTER_TYPES = {
-    "local": LocalExporter.Local,
-    "s3": S3Exporter.S3,
-}
-
-REPOSITORY_TYPES = {
-    "s3": S3Repository,
-}
 
 
 class TEMPLATES_TYPES(Enum):

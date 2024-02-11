@@ -1,7 +1,4 @@
-from docscribe.services.repository.manager import (
-    RepositoryManager,
-    REPOSITORY_TYPES,
-)
+from docscribe.services.repository.manager import RepositoryManager
 
 
 def create_repository() -> None:

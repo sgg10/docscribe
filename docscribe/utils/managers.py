@@ -2,7 +2,10 @@ import rich
 import click
 
 from docscribe.utils.validations import validate_config
-from docscribe.constants import EXPORTER_TYPES, REPOSITORY_TYPES, CONFIG_SEGMENTS
+from docscribe.constants import CONFIG_SEGMENTS
+from docscribe.services.exporter import EXPORTER_TYPES
+from docscribe.services.repository import REPOSITORY_TYPES
+
 
 SEGMENTS = {
     "exporters": EXPORTER_TYPES,

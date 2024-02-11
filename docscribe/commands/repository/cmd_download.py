@@ -1,8 +1,5 @@
-import json
-
 import click
 
-from docscribe.constants import CONFIG_FILE, DIRECTORY
 from docscribe.services.repository.main import download as run
 
 

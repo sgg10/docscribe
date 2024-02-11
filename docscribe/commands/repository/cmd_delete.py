@@ -1,6 +1,4 @@
-import json
 import click
-from docscribe.constants import CONFIG
 
 from docscribe.utils.validations import validate_config
 from docscribe.services.repository.main import delete_repository as run

@@ -1,9 +1,7 @@
 import json
 
-from docscribe.constants import CONFIG_FILE
 
-
-def read_config():
-    with open(CONFIG_FILE, "r") as f:
+def read_config(config_file):
+    with config_file.open("r") as f:
         data = json.load(f)
     return data
