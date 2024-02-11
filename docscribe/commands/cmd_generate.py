@@ -1,13 +1,8 @@
-import json
-from pathlib import Path
-
 import rich
 import click
 
-from docscribe.constants import (
-    DIRECTORY,
-    CONFIG_FILE,
-)
+from docscribe.constants import CONFIG, CONFIG_FILE
+
 from docscribe.services.generator.main import run
 
 
@@ -25,15 +20,11 @@ from docscribe.services.generator.main import run
 )
 def command(doc_name, repository, use_default_kwargs, exporter):
     """Generate a document"""
-    config_file = Path(CONFIG_FILE)
 
-    if not config_file.exists():
-        raise click.Abort(f"Config file {config_file} does not exist")
+    if not CONFIG_FILE.exists():
+        raise click.Abort(f"Config file {CONFIG_FILE} does not exist")
 
-    with config_file.open("r") as file:
-        config = json.load(file)
-
-    repositories = config.get("repositories")
+    repositories = CONFIG.get("repositories")
     if not repositories:
         repositories = {"local": {}}
 
@@ -50,10 +41,10 @@ def command(doc_name, repository, use_default_kwargs, exporter):
     if not exporter:
         exporter = click.prompt(
             "Enter the name of the exporter to use",
-            type=click.Choice(config.get("exporters", {}).keys()),
+            type=click.Choice(CONFIG.get("exporters", {}).keys()),
         )
     else:
-        if exporter not in config.get("exporters", {}):
+        if exporter not in CONFIG.get("exporters", {}):
             raise click.Abort(f"Exporter {exporter} does not exist in config")
 
     run(doc_name, repository, use_default_kwargs, exporter)

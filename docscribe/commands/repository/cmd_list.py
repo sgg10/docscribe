@@ -1,8 +1,6 @@
-import json
-
 import click
 
-from docscribe.constants import CONFIG_FILE, DIRECTORY
+from docscribe.utils.validations import validate_config
 from docscribe.services.repository.main import list_reports as run
 
 
@@ -10,14 +8,7 @@ from docscribe.services.repository.main import list_reports as run
 @click.argument("repository", required=False, default=None)
 def command(repository):
     if not repository:
-        with open(CONFIG_FILE, "r") as f:
-            data = json.load(f)
-
-        repositories = data.get("repositories", {})
-
-        if not repositories:
-            click.echo("No repositories found.")
-            return
+        repositories = validate_config("repositories")
 
         for repo in repositories:
             click.echo(repo)

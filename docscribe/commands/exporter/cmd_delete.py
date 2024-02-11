@@ -1,7 +1,6 @@
-import json
 import click
-from docscribe.constants import CONFIG_FILE
 
+from docscribe.utils.validations import validate_config
 from docscribe.services.exporter.main import delete_exporter as run
 
 
@@ -9,14 +8,7 @@ from docscribe.services.exporter.main import delete_exporter as run
 @click.argument("repository", required=False, default=None)
 def command(repository):
     if not repository:
-        with open(CONFIG_FILE, "r") as f:
-            data = json.load(f)
-
-        exporters = data.get("exporters", {})
-
-        if not exporters:
-            click.echo("No exporters found.")
-            return
+        exporters = validate_config("exporters")
 
         repository = click.prompt(
             "Enter the name of the repository to delete",

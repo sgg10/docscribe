@@ -1,9 +1,14 @@
 from enum import Enum
+from pathlib import Path
+
+from docscribe.utils.read_config import read_config
 
 
-DIRECTORY = "docscribe_repos"
-CONFIG_FILE = ".docscribe_config.json"
-TMP_DIR = f"{DIRECTORY}/.tmp"
+DIRECTORY = Path("docscribe_repos")
+CONFIG_FILE = Path(".docscribe_config.json")
+TMP_DIR = DIRECTORY / ".tmp"
+
+CONFIG = read_config()
 
 
 class TEMPLATES_TYPES(Enum):
@@ -26,11 +31,3 @@ class TEMPLATES_TYPES(Enum):
                 f"Invalid report type: {value}. Must be one of {cls.choices()}"
             )
         return value
-
-    # @classmethod
-    # def __iter__(cls):
-    #     return iter(cls.choices())
-
-    # @classmethod
-    # def __contains__(cls, value):
-    #     return value in cls.choices()

@@ -1,15 +1,14 @@
-import json
-from pathlib import Path
-
 import rich
 import click
 
 from docscribe.constants import (
+    CONFIG,
     DIRECTORY,
-    TEMPLATES_TYPES,
     CONFIG_FILE,
+    TEMPLATES_TYPES,
 )
 from docscribe.services.doc.create import run
+from docscribe.utils.validations import validate_config
 
 
 @click.command()
@@ -28,16 +27,11 @@ from docscribe.services.doc.create import run
 def command(doc_name, repository, doc_type):
     """Create a new document."""
 
-    # Load config file
-    config_file = Path(CONFIG_FILE)
+    if not CONFIG_FILE.exists():
+        raise click.Abort(f"Config file {CONFIG_FILE} does not exist")
 
-    if not config_file.exists():
-        raise click.Abort(f"Config file {config_file} does not exist")
+    repositories = validate_config("repositories", abort=False)
 
-    with config_file.open("r") as file:
-        config = json.load(file)
-
-    repositories = config.get("repositories")
     if not repositories:
         repositories = {"local": {}}
 

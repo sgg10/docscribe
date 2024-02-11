@@ -4,12 +4,10 @@ from pathlib import Path
 import rich
 import click
 
-from docscribe.constants import (
-    DIRECTORY,
-    CONFIG_FILE,
-)
+from docscribe.constants import CONFIG_FILE
 
 from docscribe.services.doc.delete import run
+from docscribe.utils.validations import validate_config
 
 
 @click.command()
@@ -19,16 +17,11 @@ from docscribe.services.doc.delete import run
 )
 def command(doc_name, repository):
     """Delete a document."""
-    # Load config file
-    config_file = Path(CONFIG_FILE)
 
-    if not config_file.exists():
-        raise click.Abort(f"Config file {config_file} does not exist")
+    if not CONFIG_FILE.exists():
+        raise click.Abort(f"Config file {CONFIG_FILE} does not exist")
 
-    with config_file.open("r") as file:
-        config = json.load(file)
-
-    repositories = config.get("repositories")
+    repositories = validate_config("repositories", abort=False)
     if not repositories:
         repositories = {"local": {}}
 
