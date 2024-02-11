@@ -18,8 +18,7 @@ class Segment(ABC):
         self.segment = segment
 
     @abstractmethod
-    def _auth(self):
-        pass
+    def _auth(self): ...
 
     @abstractmethod
     def _create_config(self, *args, **kwargs) -> dict:

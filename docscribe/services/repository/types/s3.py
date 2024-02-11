@@ -7,6 +7,7 @@ from botocore.exceptions import NoCredentialsError, ClientError, ProfileNotFound
 
 from docscribe.constants import DIRECTORY
 from docscribe.services.repository.types.base import Repository
+from docscribe.utils.s3 import create_s3_segment_config, s3_auth
 
 
 class S3(Repository):
@@ -15,23 +16,7 @@ class S3(Repository):
         super().__init__(name, "s3", config)
 
     def _auth(self):
-        try:
-            if self.config["method"] == "profile":
-                session = boto3.Session(profile_name=self.config["profile_name"])
-                self.s3 = session.client("s3")
-                return
-
-            self.s3 = boto3.client(
-                "s3",
-                aws_access_key_id=self.config["aws_access_key_id"],
-                aws_secret_access_key=self.config["aws_secret_access_key"],
-            )
-        except NoCredentialsError:
-            print("No AWS credentials found.")
-            os._exit(1)
-        except ProfileNotFound:
-            print(f"Profile {self.config['profile_name']} not found.")
-            os._exit(1)
+        self.s3 = s3_auth(**self.config)
 
     def download(self, report_name: str) -> None:
         self._auth()
@@ -74,25 +59,4 @@ class S3(Repository):
             print("No AWS credentials found.")
 
     def _create_config(self, *args, **kwargs) -> dict:
-        click.echo("Please provide the following information to configure S3")
-        bucket = click.prompt("Enter your bucket name", type=str)
-        prefix = click.prompt("Enter your prefix", type=str, default="")
-
-        result = {"bucket": bucket, "prefix": prefix}
-
-        # Ask the user to choose between using profile or access key and secret key
-        profile = click.confirm(
-            "Do you want to use a profile? (If not, you will be asked for access key and secret key)"
-        )
-        if profile:
-            profile_name = click.prompt("Enter your profile name", type=str)
-            return {**result, "profile_name": profile_name, "method": "profile"}
-        else:
-            aws_access_key_id = click.prompt("Enter your AWS access key", type=str)
-            aws_secret_access_key = click.prompt("Enter your AWS secret key", type=str)
-            return {
-                **result,
-                "aws_access_key_id": aws_access_key_id,
-                "aws_secret_access_key": aws_secret_access_key,
-                "method": "keys",
-            }
+        return create_s3_segment_config()

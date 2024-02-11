@@ -13,7 +13,7 @@ class Local(Exporter):
         super().__init__(name, "local", config)
 
     def make_output_uri(self, file_name) -> str:
-        path = Path(DIRECTORY).joinpath("outputs", self.name)
+        path = DIRECTORY.joinpath("outputs", self.name)
         path.mkdir(exist_ok=True, parents=True)
         return str(path.joinpath(file_name))
 

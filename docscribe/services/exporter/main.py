@@ -8,13 +8,13 @@ from docscribe.services.exporter.manager import (
 
 def create_exporter() -> None:
     manager = ExporterManager(None)
-    manager.create_exporter()
+    manager.create_segment()
     rich.print("[bold green]Exporter created.[/bold green]")
 
 
 def delete_exporter(exporter_name: str) -> None:
     manager = ExporterManager(exporter_name)
-    manager.delete_exporter()
+    manager.delete_segment()
     rich.print("[bold green]Exporter deleted.[/bold green]")
 
 

@@ -6,7 +6,7 @@ from docscribe.services.repository.manager import (
 
 def create_repository() -> None:
     manager = RepositoryManager(None)
-    manager.create_repository()
+    manager.create_segment()
     print("Repository created.")
 
 
@@ -24,5 +24,5 @@ def download(repository_name: str | None, report_name: str) -> None:
 
 def delete_repository(repository_name: str) -> None:
     manager = RepositoryManager(repository_name)
-    manager.delete_repository()
+    manager.delete_segment()
     print("Repository deleted.")
