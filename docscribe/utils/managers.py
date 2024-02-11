@@ -49,13 +49,11 @@ class SegmentManager:
             )
             return
 
-        name = click.prompt(
-            f"Enter the name of the {self.segment_name.rstrip('s').capitalize()} segment"
-        )
+        name = click.prompt(f"Enter the name of the {self.segment_name.rstrip('s')}")
 
         _type = click.prompt(
             f"Enter the type of {self.segment}",
-            type=click.Choice(SEGMENTS[self.segment].keys()),
+            type=click.Choice(SEGMENTS[self.segment_name].keys()),
         )
 
         self.segment = SEGMENTS[self.segment_name][_type](name)

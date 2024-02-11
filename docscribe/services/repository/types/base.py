@@ -6,7 +6,7 @@ from docscribe.utils.segment import Segment
 
 class Repository(Segment, ABC):
     def __init__(self, name: str, _type: str, config: dict | None = None):
-        super().__init__(name, _type, "exporters", config)
+        super().__init__(name, _type, "repositories", config)
 
     @abstractmethod
     def download(self, report_name: str) -> None: ...

@@ -9,7 +9,7 @@ from docscribe.constants import S3_AUTH_TYPES
 def create_s3_segment_config() -> dict:
     click.echo("Please provide the following information to configure S3")
     bucket = click.prompt("Enter your bucket name", type=str)
-    prefix = click.prompt("Enter your prefix", type=str, default="generated-reports/")
+    prefix = click.prompt("Enter your prefix", type=str)
 
     result = {"bucket": bucket, "prefix": prefix}
 

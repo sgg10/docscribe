@@ -26,7 +26,8 @@ def command(doc_name, repository, doc_type):
     """Create a new document."""
 
     if not CONFIG_FILE.exists():
-        raise click.Abort(f"Config file {CONFIG_FILE} does not exist")
+        rich.print(f"[red]Config file {CONFIG_FILE} does not exist[/red]")
+        raise click.Abort()
 
     repositories = validate_config("repositories", abort=False)
 
@@ -34,7 +35,8 @@ def command(doc_name, repository, doc_type):
         repositories = {"local": {}}
 
     if repository not in repositories:
-        raise click.Abort(f"Repository {repository} does not exist in config")
+        rich.print(f"[red]Repository {repository} does not exist in config[/red]")
+        raise click.Abort()
 
     if not doc_name:
         # Prompt for doc name

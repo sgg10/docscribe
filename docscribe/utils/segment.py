@@ -10,12 +10,12 @@ class Segment(ABC):
     def __init__(self, name: str, _type: str, segment: str, config: dict | None = None):
         self.name = name
         self._type = _type
+        self.segment = segment
         if config is None:
             self.config = self._create_config()
             self._write_config()
         else:
             self.config = config
-        self.segment = segment
 
     @abstractmethod
     def _auth(self): ...
