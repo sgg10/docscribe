@@ -16,13 +16,14 @@ from docscribe.services.generator.main import run
 @click.option(
     "-r", "--repository", help="Repository to delete the document from", default="local"
 )
+@click.option("-e", "--exporter", "exporter", help="Exporter to use")
 @click.option(
     "--use-default-kwargs",
     is_flag=True,
     default=False,
     help="Use default kwargs for the document",
 )
-def command(doc_name, repository, use_default_kwargs):
+def command(doc_name, repository, use_default_kwargs, exporter):
     """Generate a document"""
     config_file = Path(CONFIG_FILE)
 
@@ -46,4 +47,13 @@ def command(doc_name, repository, use_default_kwargs):
             rich.print("[red]Document name cannot be empty[/red]")
             doc_name = click.prompt("Enter the name of the document to delete")
 
-    run(doc_name, repository, use_default_kwargs)
+    if not exporter:
+        exporter = click.prompt(
+            "Enter the name of the exporter to use",
+            type=click.Choice(config.get("exporters", {}).keys()),
+        )
+    else:
+        if exporter not in config.get("exporters", {}):
+            raise click.Abort(f"Exporter {exporter} does not exist in config")
+
+    run(doc_name, repository, use_default_kwargs, exporter)

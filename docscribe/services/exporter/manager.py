@@ -28,11 +28,11 @@ class ExporterManager:
                     name, exporter_data["config"]
                 )
 
-    def export(self, file_name: str, content) -> None:
+    def export(self, file_name: str, *args, **kwargs) -> None:
         if not self.exporter:
             click.echo(f"Exporter {self.exporter} not found.")
             return
-        self.exporter.export(file_name, content)
+        self.exporter.export(file_name, mode=kwargs.get("mode", "rb"))
 
     def make_output_uri(self, file_name: str) -> str:
         if not self.exporter:

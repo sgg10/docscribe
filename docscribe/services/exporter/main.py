@@ -18,7 +18,6 @@ def delete_exporter(exporter_name: str) -> None:
     rich.print("[bold green]Exporter deleted.[/bold green]")
 
 
-def export(exporter_name: str | None, file_name: str, content) -> None:
+def export(exporter_name: str | None, file_name, file_type) -> None:
     manager = ExporterManager(exporter_name)
-    manager.export(file_name, content)
-    rich.print(f"{file_name} exported.")
+    manager.export(file_name, mode=file_type)

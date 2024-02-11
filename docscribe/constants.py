@@ -3,6 +3,7 @@ from enum import Enum
 
 DIRECTORY = "docscribe_repos"
 CONFIG_FILE = ".docscribe_config.json"
+TMP_DIR = f"{DIRECTORY}/.tmp"
 
 
 class TEMPLATES_TYPES(Enum):

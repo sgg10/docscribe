@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import rich
 import click
 
 from docscribe.constants import DIRECTORY
@@ -16,11 +17,23 @@ class Local(Exporter):
         path.mkdir(exist_ok=True, parents=True)
         return str(path.joinpath(file_name))
 
-    def export(self, file_name: str, content) -> None:
-        path = Path(self.make_output_uri(file_name))
-        with path.open("w") as f:
+    def export(self, file_name: str, *args, **kwargs) -> None:
+        # Move the file to the outputs directory
+        mode = kwargs.get("mode", "rb")
+
+        file = Path(file_name)
+
+        with file.open(mode) as f:
+            content = f.read()
+
+        output_uri = self.make_output_uri(file_name.name)
+        output_uri = Path(output_uri)
+        output_uri.parent.mkdir(exist_ok=True, parents=True)
+        with output_uri.open("w" if mode == "r" else "wb") as f:
             f.write(content)
-        click.echo(f"Report saved at {path}")
+
+        file.unlink()
+        rich.print(f"Report saved at {output_uri}")
 
     def _auth(self):
         pass

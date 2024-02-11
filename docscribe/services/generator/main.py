@@ -12,7 +12,8 @@ from docxtpl import DocxTemplate
 from jsonschema import validate, ValidationError
 from jinja2 import Environment, FileSystemLoader
 
-from docscribe.constants import CONFIG_FILE, DIRECTORY, TEMPLATES_TYPES
+from docscribe.services.exporter.main import ExporterManager, export
+from docscribe.constants import CONFIG_FILE, DIRECTORY, TEMPLATES_TYPES, TMP_DIR
 
 
 def read_document_config(
@@ -162,10 +163,13 @@ def render_document_template(
         rich.print(f"[red]Document template {template_file} not found![/red]")
         raise click.Abort()
 
+    output = Path(TMP_DIR).joinpath(f"{document_name}.{document_type}")
+    output.parent.mkdir(exist_ok=True, parents=True)
+
     if document_type == TEMPLATES_TYPES.DOCX.value:
         doc = DocxTemplate(template_file)
         doc.render(document_info)
-        doc.save(f"{document_name}.docx")
+        doc.save(f"{output}")
     else:
         env = Environment(loader=FileSystemLoader(template_file.parent))
         template = env.get_template(template_file.name)
@@ -173,14 +177,19 @@ def render_document_template(
         # Render the template
         rendered_template = template.render(document_info)
 
-        with open(f"{document_name}.md", "w") as file:
+        with output.open("w") as file:
             file.write(rendered_template)
 
     print(f"Document {document_name} generated successfully!")
 
+    return output
+
 
 def run(
-    document_name: str, repository_name: str = "local", use_default_kwargs: bool = False
+    document_name: str,
+    repository_name: str = "local",
+    use_default_kwargs: bool = False,
+    exporter_name: str = "local",
 ):
     """Main function to run the generator."""
 
@@ -212,9 +221,16 @@ def run(
 
     validate_document_result(result, document_config.get("template_schema", {}))
 
-    render_document_template(
+    output_path = render_document_template(
         document_name,
         repository_name,
         result,
         document_config["template_type"],
+    )
+
+    # Export the document
+    export(
+        exporter_name,
+        output_path,
+        "rb" if document_config["template_type"] == "docx" else "r",
     )

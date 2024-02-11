@@ -42,16 +42,22 @@ class S3(Exporter):
             return f"s3://{self.config['bucket']}/{self.config['prefix'].rstrip('/')}/{file_name}"
         return f"{self.config['prefix'].rstrip('/')}/{file_name}"
 
-    def export(self, file_name: str, content) -> None:
+    def export(self, file_path: str, *args, **kwargs) -> None:
         self._auth()
         try:
-            self.s3.put_object(
+            # Upload the file
+            self.s3.upload_file(
+                Filename=file_path,
                 Bucket=self.config["bucket"],
-                Key=f"{self.config['prefix'].rstrip('/')}/{file_name}",
-                Body=content,
+                Key=f"{self.config['prefix'].rstrip('/')}/{Path(file_path).name}",
             )
+
+            # Delete the local file
+            file_path = Path(file_path)
+            file_path.unlink()
+
             click.echo(
-                f"Report saved at {self.make_output_uri(file_name, full_uri=True)}"
+                f"Report saved at {self.make_output_uri(file_path.name, full_uri=True)}"
             )
         except NoCredentialsError:
             print("No AWS credentials found.")
