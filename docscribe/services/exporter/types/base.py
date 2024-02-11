@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from docscribe.constants import CONFIG_FILE
 
 
-class Repository(ABC):
+class Exporter(ABC):
     def __init__(self, name: str, _type: str, config: dict | None = None):
         self.name = name
         self._type = _type
@@ -20,11 +20,11 @@ class Repository(ABC):
         pass
 
     @abstractmethod
-    def download(self, report_name: str) -> None:
+    def export(self, file_name: str, content) -> None:
         pass
 
     @abstractmethod
-    def list_reports(self, *args, **kwargs) -> Iterable[str]:
+    def make_output_uri(self, file_name: str) -> str:
         pass
 
     @abstractmethod
@@ -35,9 +35,9 @@ class Repository(ABC):
         with open(CONFIG_FILE, "r") as f:
             data = json.load(f)
 
-        repos = data.get("repositories", {})
+        repos = data.get("exporters", {})
         repos[self.name] = {"type": self._type, "config": self.config}
-        data["repositories"] = repos
+        data["exporters"] = repos
 
         with open(CONFIG_FILE, "w") as f:
             json.dump(data, f, indent=4)
@@ -46,12 +46,11 @@ class Repository(ABC):
         with open(CONFIG_FILE, "r") as f:
             data = json.load(f)
 
-        repos = data.get("repositories", {})
+        repos = data.get("exporters", {})
         if self.name not in repos:
             return
-
         del repos[self.name]
-        data["repositories"] = repos
+        data["exporters"] = repos
 
         with open(CONFIG_FILE, "w") as f:
             json.dump(data, f, indent=4)

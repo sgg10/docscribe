@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import rich
@@ -28,8 +29,18 @@ def run(
 
     doc_path.mkdir(parents=True)
 
-    for file in [f"template.{doc_type}", "config.json", "script.py"]:
+    for file in [f"template.{doc_type}", "script.py"]:
         file_path = doc_path / file
         file_path.touch()
+
+    with open(doc_path / "config.json", "w") as f:
+        data = {
+            "default_export_name": doc_name,
+            "kwargs": {},
+            "template_schema": {},
+            "required_modules": [],
+            "template_type": doc_type,
+        }
+        json.dump(data, f, indent=4)
 
     rich.print(f"[green]Document {doc_name} created successfully[/green]")
