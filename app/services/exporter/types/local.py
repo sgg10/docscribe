@@ -3,7 +3,7 @@ from pathlib import Path
 import rich
 import click
 
-from app.constants import DIRECTORY
+from app.constants import LOCAL_EXPORTS_DIR
 from app.services.exporter.types.base import Exporter
 
 
@@ -13,7 +13,7 @@ class Local(Exporter):
         super().__init__(name, "local", config)
 
     def make_output_uri(self, file_name) -> str:
-        path = DIRECTORY.joinpath("outputs", self.name)
+        path = LOCAL_EXPORTS_DIR / self.name
         path.mkdir(exist_ok=True, parents=True)
         return str(path.joinpath(file_name))
 

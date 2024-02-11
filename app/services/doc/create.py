@@ -3,7 +3,7 @@ import json
 import rich
 import click
 
-from app.constants import DIRECTORY, TEMPLATES_TYPES
+from app.constants import REPOSITORIES_DIR, TEMPLATES_TYPES
 
 
 def run(
@@ -12,7 +12,7 @@ def run(
     doc_type: str = TEMPLATES_TYPES.default(),
 ):
     """Create a doc from the given repository."""
-    repo_path = DIRECTORY / repository
+    repo_path = REPOSITORIES_DIR / repository
     repo_path.mkdir(parents=True, exist_ok=True)
 
     try:

@@ -4,7 +4,9 @@ from typing import Literal
 
 from app.utils.read_config import read_config
 
-DIRECTORY = Path("docscribe_repos")
+DIRECTORY = Path("docscribe")
+REPOSITORIES_DIR = DIRECTORY / "repositories"
+LOCAL_EXPORTS_DIR = DIRECTORY / "outputs"
 CONFIG_FILE = Path(".docscribe_config.json")
 TMP_DIR = DIRECTORY / ".tmp"
 

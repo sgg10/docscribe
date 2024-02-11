@@ -1,12 +1,12 @@
 import rich
 import click
 
-from app.constants import DIRECTORY
+from app.constants import REPOSITORIES_DIR
 
 
 def run(doc_name: str, repository: str = "local"):
     """Delete a doc from the given repository."""
-    repo_path = DIRECTORY / repository
+    repo_path = REPOSITORIES_DIR / repository
 
     if not repo_path.exists():
         rich.print(f"[red]Repository {repository} does not exist[/red]")

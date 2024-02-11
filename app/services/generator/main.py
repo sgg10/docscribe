@@ -5,7 +5,7 @@ import click
 from jsonschema import validate, ValidationError
 
 from app.services.exporter.main import export
-from app.constants import DIRECTORY
+from app.constants import REPOSITORIES_DIR
 
 from app.services.generator.template_requirements import (
     install_requirements,
@@ -22,7 +22,9 @@ def read_document_config(
     repository_name: str = "local",
 ) -> dict:
     """Reads the document configuration from the configuration file."""
-    config_file = DIRECTORY.joinpath(repository_name, document_name, "config.json")
+    config_file = REPOSITORIES_DIR.joinpath(
+        repository_name, document_name, "config.json"
+    )
 
     if not config_file.exists():
         rich.print(f"[red]Document {document_name} not found![/red]")
@@ -71,7 +73,8 @@ def run(
 
         # Save the keyword arguments
         with open(
-            DIRECTORY.joinpath(repository_name, document_name, "config.json"), "w"
+            REPOSITORIES_DIR.joinpath(repository_name, document_name, "config.json"),
+            "w",
         ) as file:
             json.dump(document_config, file, indent=4)
 

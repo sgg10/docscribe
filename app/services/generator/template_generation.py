@@ -6,14 +6,14 @@ import click
 from docxtpl import DocxTemplate
 from jinja2 import Environment, FileSystemLoader
 
-from app.constants import DIRECTORY, TEMPLATES_TYPES, TMP_DIR
+from app.constants import REPOSITORIES_DIR, TEMPLATES_TYPES, TMP_DIR
 
 
 def exec_document_script(
     document_name: str, repository_name: str = "local", document_kwargs: dict = {}
 ):
     """Executes the document script."""
-    script_file = DIRECTORY.joinpath(repository_name, document_name, "script.py")
+    script_file = REPOSITORIES_DIR.joinpath(repository_name, document_name, "script.py")
 
     if not script_file.exists():
         rich.print(f"[red]Document script {script_file} not found![/red]")
@@ -45,7 +45,7 @@ def render_document_template(
 ):
     """Renders the document template."""
 
-    template_file = DIRECTORY.joinpath(
+    template_file = REPOSITORIES_DIR.joinpath(
         repository_name, document_name, f"template.{document_type}"
     )
 

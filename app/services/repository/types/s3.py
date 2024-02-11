@@ -1,6 +1,6 @@
 from botocore.exceptions import NoCredentialsError, ClientError, ProfileNotFound
 
-from app.constants import DIRECTORY
+from app.constants import REPOSITORIES_DIR
 from app.services.repository.types.base import Repository
 from app.utils.s3 import create_s3_segment_config, s3_auth
 
@@ -21,7 +21,7 @@ class S3(Repository):
                 Bucket=self.config["bucket"],
                 Prefix=f"{self.config['prefix'].rstrip('/')}/{report_name}",
             )
-            path = DIRECTORY.joinpath(self.name, report_name)
+            path = REPOSITORIES_DIR.joinpath(self.name, report_name)
             path.mkdir(exist_ok=True, parents=True)
 
             for page in response_iterator:
