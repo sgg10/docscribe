@@ -8,7 +8,7 @@ from docscribe.constants import CONFIG_FILE, DIRECTORY
 
 def run():
     """Initialize docscribe configuration"""
-    path = Path(DIRECTORY) / "local"
+    path = DIRECTORY / "local"
     try:
         path.mkdir(exist_ok=True, parents=True)
     except Exception as e:

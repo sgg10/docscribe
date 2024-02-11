@@ -26,7 +26,7 @@ class S3(Repository):
                 Bucket=self.config["bucket"],
                 Prefix=f"{self.config['prefix'].rstrip('/')}/{report_name}",
             )
-            path = Path(DIRECTORY).joinpath(self.name, report_name)
+            path = DIRECTORY.joinpath(self.name, report_name)
             path.mkdir(exist_ok=True, parents=True)
 
             for page in response_iterator:
