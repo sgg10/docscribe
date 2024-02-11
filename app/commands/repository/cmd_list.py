@@ -1,3 +1,4 @@
+import rich
 import click
 
 from app.utils.validations import validate_config
@@ -12,6 +13,10 @@ def command(repository):
 
         for repo in repositories:
             click.echo(repo)
+        return
+
+    if repository == "local":
+        rich.print("[green]Local repository is always available[/green]")
         return
 
     run(repository)
