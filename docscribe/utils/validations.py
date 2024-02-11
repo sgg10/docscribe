@@ -3,12 +3,10 @@ from typing import Literal
 import rich
 import click
 
-from docscribe.constants import CONFIG
+from docscribe.constants import CONFIG, CONFIG_SEGMENTS
 
 
-def validate_config(
-    config_segment: Literal["repositories", "exporters"], abort: bool = True
-):
+def validate_config(config_segment: CONFIG_SEGMENTS, abort: bool = True):
     segment = CONFIG.get(config_segment, {})
 
     if not segment:

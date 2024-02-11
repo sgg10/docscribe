@@ -1,5 +1,6 @@
 from enum import Enum
 from pathlib import Path
+from typing import Literal
 
 from docscribe.utils.read_config import read_config
 
@@ -9,6 +10,8 @@ CONFIG_FILE = Path(".docscribe_config.json")
 TMP_DIR = DIRECTORY / ".tmp"
 
 CONFIG = read_config()
+
+CONFIG_SEGMENTS = Literal["repositories", "exporters"]
 
 
 class TEMPLATES_TYPES(Enum):
