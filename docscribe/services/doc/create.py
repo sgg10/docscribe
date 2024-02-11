@@ -1,5 +1,4 @@
 import json
-from pathlib import Path
 
 import rich
 import click
@@ -13,7 +12,7 @@ def run(
     doc_type: str = TEMPLATES_TYPES.default(),
 ):
     """Create a doc from the given repository."""
-    repo_path = Path(DIRECTORY) / repository
+    repo_path = DIRECTORY / repository
     repo_path.mkdir(parents=True, exist_ok=True)
 
     try:
@@ -23,9 +22,12 @@ def run(
 
     doc_path = repo_path / doc_name
     if doc_path.exists():
-        raise click.Abort(f"Document {doc_name} already exists in {repository}")
+        rich.print(f"[red]Document {doc_name} already exists in {repository}[/red]")
+        raise click.Abort()
 
-    click.echo(f"Creating {doc_name} document for {repository} of type {doc_type}")
+    rich.print(
+        f"[blue]Creating {doc_name} document for {repository} of type {doc_type}[/blue]"
+    )
 
     doc_path.mkdir(parents=True)
 

@@ -1,23 +1,23 @@
-from pathlib import Path
-
 import rich
 import click
 
-from docscribe.constants import DIRECTORY, TEMPLATES_TYPES
+from docscribe.constants import DIRECTORY
 
 
 def run(doc_name: str, repository: str = "local"):
     """Delete a doc from the given repository."""
-    repo_path = Path(DIRECTORY) / repository
+    repo_path = DIRECTORY / repository
 
     if not repo_path.exists():
-        raise click.Abort(f"Repository {repository} does not exist")
+        rich.print(f"[red]Repository {repository} does not exist[/red]")
+        raise click.Abort()
 
     doc_path = repo_path / doc_name
     if not doc_path.exists():
-        raise click.Abort(f"Document {doc_name} does not exist in {repository}")
+        rich.print(f"[red]Document {doc_name} does not exist in {repository}[/red]")
+        raise click.Abort()
 
-    click.echo(f"Deleting {doc_name} document from {repository}")
+    rich.print(f"[blue]Deleting {doc_name} document from {repository}[/blue]")
 
     # Remove the all the files and the directory
     for file in doc_path.iterdir():
