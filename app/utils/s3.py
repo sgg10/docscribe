@@ -7,6 +7,12 @@ from app.constants import S3_AUTH_TYPES
 
 
 def create_s3_segment_config() -> dict:
+    """
+    Interactively collects information from the user to configure an S3 segment.
+
+    Returns:
+        dict: A dictionary containing the configured S3 segment information, including bucket name, prefix, and either profile name or keys.
+    """
     rich.print("[bold]Please provide the following information to configure S3[/bold]")
     bucket = click.prompt("Enter your bucket name", type=str)
     prefix = click.prompt("Enter your prefix", type=str)
@@ -29,6 +35,19 @@ def create_s3_segment_config() -> dict:
 
 
 def s3_auth(method: S3_AUTH_TYPES, **config) -> boto3.client:
+    """
+    Authenticates to AWS S3 using the specified method and configuration.
+
+    Args:
+        method (S3_AUTH_TYPES): The authentication method, either 'profile' or 'keys'.
+        **config: Additional keyword arguments containing the authentication details.
+
+    Returns:
+        boto3.client: A boto3 client object authenticated to S3.
+
+    Raises:
+        click.Abort: If no credentials are found or the specified profile is not found.
+    """
     try:
         if method == "profile":
             session = boto3.Session(profile_name=config.get("profile_name"))

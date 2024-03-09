@@ -23,7 +23,23 @@ from app.utils.validations import validate_config
     default=TEMPLATES_TYPES.default(),
 )
 def command(doc_name, repository, doc_type):
-    """Create a new document."""
+    """
+    Creates a new document in the specified repository with the given name and type.
+
+    This command initializes a new document creation process, which includes validating
+    the existence of the configuration file and repository. It then proceeds to create
+    the document if all validations pass. If any validation fails, the process is aborted,
+    and an appropriate error message is displayed.
+
+    Args:
+        doc_name (str): The name of the new document. If not provided, the user will be prompted.
+        repository (str): The name of the repository where the document will be created. Defaults to 'local'.
+        doc_type (str): The type of the document (e.g., 'docx', 'md', 'html'). Defaults to the system's default type.
+
+    Raises:
+        click.Abort: If the config file does not exist, if the specified repository is not found in the configuration,
+                     or if no document name is provided.
+    """
 
     if not CONFIG_FILE.exists():
         rich.print(f"[red]Config file {CONFIG_FILE} does not exist[/red]")

@@ -6,7 +6,22 @@ from app.constants import CONFIG_FILE, REPOSITORIES_DIR
 
 
 def run(package_manager):
-    """Initialize docscribe configuration"""
+    """
+    Initializes the DocScribe configuration with default settings.
+
+    This function sets up the initial configuration for DocScribe by creating a local repository
+    directory (if it doesn't already exist) and generating a configuration file with default
+    settings for both repositories and exporters. The configuration includes a local repository
+    and exporter by default, alongside the specified package manager.
+
+    Args:
+        package_manager (str): The package manager to be used within the DocScribe environment.
+
+    Note:
+        If the local directory creation or configuration file writing fails, it prints an error
+        message and exits the function early.
+
+    """
     path = REPOSITORIES_DIR / "local"
     try:
         path.mkdir(exist_ok=True, parents=True)

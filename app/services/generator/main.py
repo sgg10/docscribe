@@ -21,7 +21,19 @@ def read_document_config(
     document_name: str,
     repository_name: str = "local",
 ) -> dict:
-    """Reads the document configuration from the configuration file."""
+    """
+    Reads the document's configuration from its JSON configuration file.
+
+    Parameters:
+    - document_name (str): Name of the document.
+    - repository_name (str): Name of the repository where the document is located. Defaults to 'local'.
+
+    Returns:
+    - dict: The document's configuration.
+
+    Raises:
+    - click.Abort: If the configuration file does not exist.
+    """
     config_file = REPOSITORIES_DIR.joinpath(
         repository_name, document_name, "config.json"
     )
@@ -37,7 +49,16 @@ def read_document_config(
 
 
 def validate_document_result(body: dict, schema: dict):
-    """Validates the document info body."""
+    """
+    Validates the generated document information against a JSON schema.
+
+    Parameters:
+    - body (dict): The document's information to be validated.
+    - schema (dict): The JSON schema to validate against.
+
+    Raises:
+    - click.Abort: If validation fails.
+    """
     try:
         validate(instance=body, schema=schema)
     except ValidationError as e:
@@ -51,7 +72,20 @@ def run(
     use_default_kwargs: bool = False,
     exporter_name: str = "local",
 ):
-    """Main function to run the generator."""
+    """
+    Main function to generate a document and optionally export it.
+
+    This function performs the full document generation process,
+    including reading the document configuration, installing required dependencies,
+    generating the document based on the template and script, and exporting the generated document.
+
+    Parameters:
+    - document_name (str): Name of the document to generate.
+    - repository_name (str): Name of the repository where the document is located. Defaults to 'local'.
+    - use_default_kwargs (bool): Whether to use the default keyword arguments for the document. Defaults to False.
+    - exporter_name (str): The name of the exporter to use. Defaults to 'local'.
+
+    """
 
     document_config = read_document_config(document_name, repository_name)
     install_requirements(document_config)

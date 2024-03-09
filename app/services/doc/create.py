@@ -11,7 +11,24 @@ def run(
     repository: str = "local",
     doc_type: str = TEMPLATES_TYPES.default(),
 ):
-    """Create a doc from the given repository."""
+    """
+    Creates a new document template set within the specified repository.
+
+    This function sets up the necessary files for a new document template, including a template file
+    (in the specified format), a Python script for data fetching or processing, and a JSON configuration
+    file. It checks if the document already exists to prevent overwriting and ensures the document type
+    is supported.
+
+    Args:
+        doc_name (str): The name of the document/template to create.
+        repository (str, optional): The name of the repository where the document will be created. Defaults to "local".
+        doc_type (str, optional): The type of document to create. Supported types are defined in TEMPLATES_TYPES. Defaults to the default value defined in TEMPLATES_TYPES.
+
+    Raises:
+        click.Abort: If the document type is invalid or if the document already exists in the repository.
+
+    This command is interactive and will prompt the user for necessary details if not provided as arguments.
+    """
     repo_path = REPOSITORIES_DIR / repository
     repo_path.mkdir(parents=True, exist_ok=True)
 

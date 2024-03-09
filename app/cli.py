@@ -11,6 +11,18 @@ COMMANDS_TYPE = MutableMapping[str, Command] | Sequence[Command]
 
 
 class CLIGroup(click.Group):
+    """
+    A custom CLI group class to organize and dynamically load command groups and commands
+    from a directory structure.
+
+    Attributes:
+        commands_directory (Path): The directory where command groups and commands are stored.
+
+    Methods:
+        format_usage: Overrides the default usage formatting to include command and subcommand structure.
+        list_commands: Dynamically lists all commands and groups based on the directory structure.
+        get_command: Dynamically loads a command or group based on its name.
+    """
 
     def __init__(
         self,
@@ -18,16 +30,40 @@ class CLIGroup(click.Group):
         commands: COMMANDS_TYPE | None = None,
         **attrs: Any,
     ) -> None:
+        """
+        Initializes a new instance of the CLIGroup.
+
+        Args:
+            name (str, optional): The name of the group. Defaults to None.
+            commands (COMMANDS_TYPE, optional): Initial set of commands or groups. Defaults to None.
+            **attrs: Additional attributes passed to the click.Group initializer.
+        """
         super().__init__(name, commands, **attrs)
 
         self.commands_directory = Path(__file__).parent.resolve() / "commands"
 
     def format_usage(self, ctx: Context, formatter: HelpFormatter) -> None:
+        """
+        Formats the usage string to include command and subcommand structure.
+
+        Args:
+            ctx (Context): The Click context object.
+            formatter (HelpFormatter): The formatter for writing the usage string.
+        """
         formatter.write_usage(
             ctx.command_path, "<command> [<subcommand>] [OPTIONS] [ARGS]"
         )
 
     def _get_command_list(self, base_path: Path) -> Iterable[str]:
+        """
+        Retrieves a list of command names from a directory.
+
+        Args:
+            base_path (Path): The directory from which to list commands.
+
+        Returns:
+            Iterable[str]: An iterable of command names.
+        """
         return [
             filename.stem.replace("cmd_", "")
             for filename in base_path.iterdir()
@@ -35,6 +71,15 @@ class CLIGroup(click.Group):
         ]
 
     def list_commands(self, ctx: Context) -> List[str]:
+        """
+        Lists all commands and groups available in the commands directory.
+
+        Args:
+            ctx (Context): The Click context object.
+
+        Returns:
+            List[str]: A list of all command and group names, sorted alphabetically.
+        """
         commands = self._get_command_list(self.commands_directory)
         groups = [
             group.name
@@ -45,9 +90,20 @@ class CLIGroup(click.Group):
         return sorted(commands) + sorted(groups)
 
     def get_command(self, ctx: Context, name: str) -> Command | Group | None:
+        """
+        Dynamically loads a command or group based on its name.
+
+        Args:
+            ctx (Context): The Click context object.
+            name (str): The name of the command or group to load.
+
+        Returns:
+            Command | Group | None: The loaded command or group, or None if not found.
+        """
         base = self.commands_directory / name
         if base.is_dir() and base.exists():
             commands = self._get_command_list(base)
+            # Group creation and command loading logic
 
             @click.group(
                 name=name,
@@ -71,6 +127,7 @@ class CLIGroup(click.Group):
                     continue
             return group
         else:
+            # Single command loading logic
             try:
                 module = __import__(f"app.commands.cmd_{name}", None, None, ["command"])
                 return module.command

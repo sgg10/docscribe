@@ -19,7 +19,18 @@ from app.services.generator.main import run
     help="Use default kwargs for the document",
 )
 def command(doc_name, repository, use_default_kwargs, exporter):
-    """Generate a document"""
+    """
+    Executes the document generation process with the specified parameters.
+
+    This CLI command is responsible for initiating the document generation process.
+    It requires the user to specify a document name, repository, and exporter.
+    If the document name or exporter is not provided, it will prompt the user for input.
+    The repository defaults to 'local' if not specified.
+
+    The command also supports a flag for using default kwargs for the document.
+    If the specified repository or exporter does not exist in the configuration,
+    or if the configuration file itself does not exist, the command will abort with an appropriate error message.
+    """
 
     if not CONFIG_FILE.exists():
         raise click.Abort(f"Config file {CONFIG_FILE} does not exist")
