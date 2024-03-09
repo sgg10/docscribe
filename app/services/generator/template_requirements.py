@@ -5,6 +5,8 @@ from packaging import version
 import rich
 import click
 
+from app.constants import CONFIG
+
 
 def check_module(module: str) -> bool:
     """Checks if the module and optionally a specific version are installed."""
@@ -56,8 +58,9 @@ def install_requirements(config: dict):
         abort=True,
     )
 
-    # TODO: Add support for multiple package managers
-    result = os.system(f"pipenv install {uninstalled_modules}")
+    result = os.system(
+        f"{CONFIG.get('package_manager', 'pip')} install {uninstalled_modules}"
+    )
 
     if result != 0:
         rich.print("[red]Failed to install the required modules![/red]")

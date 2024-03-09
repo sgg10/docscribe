@@ -70,6 +70,6 @@ def render_document_template(
         with output.open("w") as file:
             file.write(rendered_template)
 
-    print(f"Document {document_name} generated successfully!")
+    rich.print(f"[green]Document {document_name} generated successfully![/green]")
 
     return output

@@ -33,11 +33,13 @@ class Local(Exporter):
             f.write(content)
 
         file.unlink()
-        rich.print(f"Report saved at {output_uri}")
+        rich.print(f"[green]Report saved at {output_uri}[/green]")
 
     def _auth(self):
         pass
 
     def _create_config(self, *args, **kwargs) -> dict:
-        click.echo("Local exporter does not require any configuration.")
+        rich.print(
+            "[blue][INFO]Local exporter does not require any configuration.[/blue]"
+        )
         return {}

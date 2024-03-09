@@ -7,7 +7,7 @@ from app.constants import S3_AUTH_TYPES
 
 
 def create_s3_segment_config() -> dict:
-    click.echo("Please provide the following information to configure S3")
+    rich.print("[bold]Please provide the following information to configure S3[/bold]")
     bucket = click.prompt("Enter your bucket name", type=str)
     prefix = click.prompt("Enter your prefix", type=str)
 

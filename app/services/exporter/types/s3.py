@@ -1,6 +1,6 @@
 from pathlib import Path
 
-import click
+import rich
 
 from botocore.exceptions import NoCredentialsError, ClientError
 from app.services.exporter.types.base import Exporter
@@ -33,13 +33,11 @@ class S3(Exporter):
             file_path = Path(file_path)
             file_path.unlink()
 
-            click.echo(
-                f"Report saved at {self.make_output_uri(file_path.name, full_uri=True)}"
+            rich.print(
+                f"[green]Report saved at {self.make_output_uri(file_path.name, full_uri=True)}[/green]"
             )
-        except NoCredentialsError:
-            print("No AWS credentials found.")
-        except ClientError as e:
-            print(e)
+        except (NoCredentialsError, ClientError) as e:
+            rich.print(f"[red][ERROR] {e}[/red]")
 
     def _create_config(self, *args, **kwargs) -> dict:
         return create_s3_segment_config()

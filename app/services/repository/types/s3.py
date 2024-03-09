@@ -1,5 +1,7 @@
 from botocore.exceptions import NoCredentialsError, ClientError, ProfileNotFound
 
+import rich
+
 from app.constants import REPOSITORIES_DIR
 from app.services.repository.types.base import Repository
 from app.utils.s3 import create_s3_segment_config, s3_auth
@@ -31,10 +33,8 @@ class S3(Repository):
                         obj["Key"],
                         f"{path}/{obj['Key'].split('/')[-1]}",
                     )
-        except NoCredentialsError:
-            print("No AWS credentials found.")
-        except ClientError as e:
-            print(e)
+        except (NoCredentialsError, ClientError) as e:
+            rich.print(f"[red][ERROR] {e}[/red]")
 
     def list_reports(self, *args, **kwargs) -> list[str]:
         self._auth()
@@ -50,8 +50,8 @@ class S3(Repository):
                 for page in response_iterator
                 for obj in page.get("CommonPrefixes", [])
             ]
-        except NoCredentialsError:
-            print("No AWS credentials found.")
+        except (NoCredentialsError, ClientError) as e:
+            rich.print(f"[red][ERROR] {e}[/red]")
 
     def _create_config(self, *args, **kwargs) -> dict:
         return create_s3_segment_config()

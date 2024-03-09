@@ -44,8 +44,8 @@ class SegmentManager:
 
     def create_segment(self) -> None:
         if self.segment:
-            click.echo(
-                f"{self.segment_name.rstrip('s').capitalize()} '{self.name}' already exists."
+            rich.print(
+                f"[bold yellow]{self.segment_name.capitalize()} '{self.name}' already exists.[/bold yellow]"
             )
             return
 
@@ -60,8 +60,8 @@ class SegmentManager:
 
     def delete_segment(self) -> None:
         if not self.segment:
-            click.echo(
-                f"{self.segment_name.rstrip('s').capitalize()} {self.name} not found."
+            rich.print(
+                f"[bold red]{self.segment_name.capitalize()} '{self.name}' not found.[/bold red]"
             )
             return
 

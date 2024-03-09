@@ -21,6 +21,7 @@ class TEMPLATES_TYPES(Enum):
     DOCX: str = "docx"
     MD: str = "md"
     HTML: str = "html"
+    TXT: str = "txt"
 
     @classmethod
     def choices(cls):

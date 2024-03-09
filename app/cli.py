@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Iterable, List, MutableMapping, Sequence, Any
 
+import rich
 import click
 from click.formatting import HelpFormatter
 from click.core import Command, Context, Group
@@ -25,10 +26,6 @@ class CLIGroup(click.Group):
         formatter.write_usage(
             ctx.command_path, "<command> [<subcommand>] [OPTIONS] [ARGS]"
         )
-        # if ctx.info_name == "docscribe":
-        #     formatter.write_usage(ctx.command_path, "")
-        # else:
-        #     super().format_usage(ctx, formatter)
 
     def _get_command_list(self, base_path: Path) -> Iterable[str]:
         return [
@@ -70,7 +67,7 @@ class CLIGroup(click.Group):
                     )
                     group.add_command(module.command, name=command)
                 except ImportError as e:
-                    print(e)
+                    rich.print(f"[red][ERROR] {e}[/red]")
                     continue
             return group
         else:
@@ -78,7 +75,7 @@ class CLIGroup(click.Group):
                 module = __import__(f"app.commands.cmd_{name}", None, None, ["command"])
                 return module.command
             except ImportError as e:
-                print(e)
+                rich.print(f"[red][ERROR] {e}[/red]")
                 return
 
 

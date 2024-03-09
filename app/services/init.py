@@ -5,7 +5,7 @@ import rich
 from app.constants import CONFIG_FILE, REPOSITORIES_DIR
 
 
-def run():
+def run(package_manager):
     """Initialize docscribe configuration"""
     path = REPOSITORIES_DIR / "local"
     try:
@@ -16,6 +16,7 @@ def run():
 
     config = {
         "repositories_directory": str(REPOSITORIES_DIR),
+        "package_manager": package_manager,
         "repositories": {
             "local": {
                 "type": "local",
