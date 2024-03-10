@@ -8,6 +8,8 @@ from app.commands import cmd_init
 from app.commands import cmd_generate
 from app.commands.doc import cmd_create, cmd_delete
 
+from tests.common import common_create_doc, common_delete_doc
+
 
 class TestGenerate:
     def setup_method(self):
@@ -18,20 +20,8 @@ class TestGenerate:
 
         self.create_doc()
 
-    def read_config(self):
-        with open(self.ROOT_PATH / ".docscribe_config.json", "r") as f:
-            return json.load(f)
-
     def create_doc(self):
-        result = self.runner.invoke(
-            cmd_create.command, args=["-n", "test-doc-pkg", "-t", "md"]
-        )
-        assert result.exit_code == 0
-        path = self.DOCSCRIBE_PATH / "repositories" / "local" / "test-doc-pkg"
-        assert path.exists()
-        assert (path / "config.json").exists()
-        assert (path / "script.py").exists()
-        assert (path / "template.md").exists()
+        path = common_create_doc(self.runner, cmd_create.command, self.DOCSCRIBE_PATH)
 
         with open(path / "template.md", "w") as f:
             template = "#{{title}}\n\n{{description}}"
@@ -77,9 +67,4 @@ class TestGenerate:
         assert result.exit_code == 0
 
     def teardown_method(self):
-        result = self.runner.invoke(
-            cmd_delete.command, args=["-n", "test-doc-pkg"], input="y\n"
-        )
-        assert result.exit_code == 0
-        path = self.DOCSCRIBE_PATH / "repositories" / "local" / "test-doc-pkg"
-        assert not path.exists()
+        common_delete_doc(self.runner, cmd_delete.command, self.DOCSCRIBE_PATH)

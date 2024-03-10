@@ -7,16 +7,14 @@ from app.cli import cli
 from app.commands import cmd_init
 from app.commands.exporter import cmd_add, cmd_delete
 
+from tests.common import read_config
+
 
 class TestExporter:
     def setup_method(self):
         self.runner = CliRunner()
         self.runner.invoke(cmd_init.command, args="-p pipenv")
         self.ROOT_PATH = Path(__file__).parent.parent.resolve()
-
-    def read_config(self):
-        with open(self.ROOT_PATH / ".docscribe_config.json", "r") as f:
-            return json.load(f)
 
     def test_base_exporter(self):
         result = self.runner.invoke(cli, args=["exporter"])
@@ -29,7 +27,7 @@ class TestExporter:
             cmd_add.command,
             input="sample\ns3\nsample-bucket\nsample-prefix\nprofile\nsample-profile\n",
         )
-        config = self.read_config()
+        config = read_config(self.ROOT_PATH)
         assert "exporters" in config
         assert "sample" in config["exporters"]
         assert config["exporters"]["sample"]["type"] == "s3"
@@ -40,7 +38,7 @@ class TestExporter:
             cmd_add.command,
             input="samples\nlocal\n",
         )
-        config = self.read_config()
+        config = read_config(self.ROOT_PATH)
         assert "exporters" in config
         assert "local" in config["exporters"]
         assert config["exporters"]["local"]["type"] == "local"
@@ -48,6 +46,6 @@ class TestExporter:
 
     def test_delete_exporter(self):
         result = self.runner.invoke(cmd_delete.command, args="sample")
-        config = self.read_config()
+        config = read_config(self.ROOT_PATH)
         assert "sample" not in config["exporters"]
         assert result.exit_code == 0
