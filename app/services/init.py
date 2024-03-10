@@ -22,6 +22,12 @@ def run(package_manager):
         message and exits the function early.
 
     """
+    if CONFIG_FILE.exists():
+        rich.print(
+            f"[bold blue]Info:[/bold blue] Configuration file already exists at {CONFIG_FILE}"
+        )
+        return
+
     path = REPOSITORIES_DIR / "local"
     try:
         path.mkdir(exist_ok=True, parents=True)

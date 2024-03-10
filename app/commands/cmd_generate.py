@@ -7,10 +7,8 @@ from app.services.generator.main import run
 
 
 @click.command()
-@click.option("-n", "--name", "doc_name", help="Name of the document to delete")
-@click.option(
-    "-r", "--repository", help="Repository to delete the document from", default="local"
-)
+@click.option("-n", "--name", "doc_name", help="Name of the document package")
+@click.option("-r", "--repository", help="Repository to use", default="local")
 @click.option("-e", "--exporter", "exporter", help="Exporter to use")
 @click.option(
     "--use-default-kwargs",
@@ -44,10 +42,10 @@ def command(doc_name, repository, use_default_kwargs, exporter):
 
     if not doc_name:
         # Prompt for doc name
-        doc_name = click.prompt("Enter the name of the document to delete")
+        doc_name = click.prompt("Enter the name of the document")
         while not doc_name:
             rich.print("[red]Document name cannot be empty[/red]")
-            doc_name = click.prompt("Enter the name of the document to delete")
+            doc_name = click.prompt("Enter the name of the document")
 
     if not exporter:
         exporter = click.prompt(
