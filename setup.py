@@ -11,7 +11,7 @@ def read_requirements():
 
 setup(
     name="docscribe",
-    version="0.1.0",
+    version="0.1.2",
     packages=find_packages(),
     include_dirs=".",
     include_package_data=True,
