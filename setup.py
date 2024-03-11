@@ -16,7 +16,7 @@ def read_requirements():
 
 setup(
     name="docscribe",
-    version="0.1.1",
+    version="0.1.2",
     description="A simple tool to generate documentation, reports, and more from your codebase.",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
