@@ -12,6 +12,7 @@ def read_requirements():
 setup(
     name="docscribe",
     version="0.1.0",
+    description="A simple tool to generate documentation, reports, and more from your codebase.",
     packages=find_packages(),
     include_dirs=".",
     include_package_data=True,
